@@ -1,21 +1,32 @@
 
 function getComputerChoice()
 {
-    let choice = Math.floor(Math.random() * 3);
+    let randomNumber = Math.floor(Math.random() * 3);
+    let computerChoice;
 
-    switch(choice) {
+    switch(randomNumber) {
         case 0:
-            return "rock";
+            computerChoice = "rock";
+            break;
         case 1:
-            return "paper";
+            computerChoice = "paper";
+            break;
         case 2:
-            return "scissors";
+            computerChoice = "scissors";
+            break;
         default:
             break;
     }
+
+    return computerChoice;
+}
+function getHumanChoice()
+{
+    let userChoice = prompt("Choose between: rock, paper, scissors");
+    console.log(userChoice);
+    return userChoice;
 }
 
-console.log(getComputerChoice())
-console.log(getComputerChoice())
-console.log(getComputerChoice())
-console.log(getComputerChoice())
+console.log(getComputerChoice());
+console.log(getComputerChoice());
+getHumanChoice();
