@@ -17,7 +17,7 @@ function getComputerChoice()
         default:
             break;
     }
-    console.log(`Computer choose: ${computerChoice}`);
+    console.log(`Computer chooses: ${computerChoice}`);
     return computerChoice;
 }
 function getHumanChoice()
@@ -79,9 +79,35 @@ function playRound(humanchoice, computerChoice)
         }
     }
 }
-let humanScore = 0;
-let computerScore = 0;
 
-const humanSelection = getHumanChoice();
-const computerSelection = getComputerChoice();
-playRound(humanSelection, computerSelection);
+let humanScore;
+let computerScore;
+
+function playGame()
+{
+    humanScore = 0;
+    computerScore = 0;
+    for(let i = 0 ; i < 5; i++)
+    {
+        let humanSelection = getHumanChoice();
+        let computerSelection = getComputerChoice();
+        playRound(humanSelection, computerSelection);
+    }
+
+    if(humanScore === computerScore)
+    {
+        console.log("Game Draw!");
+    }
+    else if(humanScore <= computerScore)
+    {
+        console.log("You lost the game!");
+    }
+    else if(humanScore >= computerScore)
+    {
+        console.log("You won the game!");
+    }
+
+    console.log(`You scored ${humanScore} points\nComputer scored ${computerScore} points`);
+}
+
+playGame();
