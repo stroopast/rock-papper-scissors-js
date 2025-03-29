@@ -20,28 +20,22 @@ function getComputerChoice()
     console.log(`Computer chooses: ${computerChoice}`);
     return computerChoice;
 }
-function getHumanChoice()
-{
-    let userChoice = prompt("Choose between: rock, paper, scissors");
-    console.log(`You choose: ${userChoice}`);
-    return userChoice.toLowerCase();
-}
 
 function playRound(humanchoice, computerChoice)
 {
     if(humanchoice === computerChoice)
     {
-        console.log("Even round!");
+        textStatus.textContent = `Even round!`;
     }
     else if(humanchoice == "paper")
     {
         switch(computerChoice) {
             case "scissors":
-                console.log(`You lose! ${computerChoice} beats ${humanchoice}`);
+                textStatus.textContent = `You lose! ${computerChoice} beats ${humanchoice}`;
                 computerScore++;
                 break;
             case "rock":
-                console.log(`You won! ${humanchoice} beats ${computerChoice}`);
+                textStatus.textContent = `You won! ${humanchoice} beats ${computerChoice}`;
                 humanScore++;
                 break;
             default:
@@ -52,11 +46,11 @@ function playRound(humanchoice, computerChoice)
     {
         switch(computerChoice) {
             case "rock":
-                console.log(`You lose! ${computerChoice} beats ${humanchoice}`);
+                textStatus.textContent = `You lose! ${computerChoice} beats ${humanchoice}`;
                 computerScore++;
                 break;
             case "paper":
-                console.log(`You won! ${humanchoice} beats ${computerChoice}`);
+                textStatus.textContent = `You won! ${humanchoice} beats ${computerChoice}`;
                 humanScore++;
                 break;
             default:
@@ -67,11 +61,11 @@ function playRound(humanchoice, computerChoice)
     {
         switch(computerChoice) {
             case "paper":
-                console.log(`You lose! ${computerChoice} beats ${humanchoice}`);
+                textStatus.textContent = `You lose! ${computerChoice} beats ${humanchoice}`;
                 computerScore++;
                 break;
             case "scissors":
-                console.log(`You won! ${humanchoice} beats ${computerChoice}`);
+                textStatus.textContent = `You won! ${humanchoice} beats ${computerChoice}`;
                 humanScore++;
                 break;
             default:
@@ -80,43 +74,60 @@ function playRound(humanchoice, computerChoice)
     }
 }
 
-// let humanScore;
-// let computerScore;
+function gameEnd()
+{
+    const winnerText = document.createElement("p");
+    const resetBtn = document.createElement("button");
+    displayDiv.appendChild(winnerText);
+    displayDiv.appendChild(resetBtn);
+    resetBtn.style.height = "50px";
+    resetBtn.style.width = "250px";
+    resetBtn.textContent = "Reset Game";
+    if(humanScore > computerScore)
+    {
+        winnerText.textContent = "You won!";
+    }
+    else if(computerScore > humanScore)
+    {
+        winnerText.textContent = "Computer won!";
+    }
+    else
+    {
+        winnerText.textContent = "Draw!";
+    }
+    resetBtn.addEventListener("click", () => {
+        humanScore = 0;
+        computerScore = 0;
+        isPressedLastRound = false;
+        scoreStauts.textContent = "";
+        textStatus.textContent = "";
+        displayDiv.removeChild(resetBtn);
+        displayDiv.removeChild(winnerText);
+    })
+}
 
-// function playGame()
-// {
-//     humanScore = 0;
-//     computerScore = 0;
-//     for(let i = 0 ; i < 5; i++)
-//     {
-//         let humanSelection = getHumanChoice();
-//         let computerSelection = getComputerChoice();
-//         playRound(humanSelection, computerSelection);
-//     }
+function isGameEnded()
+{
+    if(humanScore === 5 || computerScore === 5)
+    {
+        return true;
+    }
+    return false;
+}
 
-//     if(humanScore === computerScore)
-//     {
-//         console.log("Game Draw!");
-//     }
-//     else if(humanScore <= computerScore)
-//     {
-//         console.log("You lost the game!");
-//     }
-//     else if(humanScore >= computerScore)
-//     {
-//         console.log("You won the game!");
-//     }
-
-//     console.log(`You scored ${humanScore} points\nComputer scored ${computerScore} points`);
-// }
-
-// playGame();
+let humanScore = 0;
+let computerScore = 0;
+let isPressedLastRound = false;
+// let resetBtn;
 
 
 const rockBtn = document.createElement("button");
 const scissorsBtn = document.createElement("button");
 const paperBtn = document.createElement("button");
 const btnContainer = document.createElement("div");
+const displayDiv = document.createElement("div");
+const scoreStauts = document.createElement("p");
+const textStatus = document.createElement("p");
 
 const docBody = document.querySelector("body");
 
@@ -125,7 +136,11 @@ btnContainer.appendChild(rockBtn);
 btnContainer.appendChild(scissorsBtn);
 btnContainer.appendChild(paperBtn);
 
+displayDiv.appendChild(textStatus);
+displayDiv.appendChild(scoreStauts);
+
 docBody.appendChild(btnContainer);
+docBody.appendChild(displayDiv);
 
 btnContainer.classList.toggle("container")
 const container = document.querySelector(".container");
@@ -157,4 +172,60 @@ paperBtn.style.color = "green";
 paperBtn.style.fontWeight = "900";
 paperBtn.style.fontSize = "30px";
 /////////////////////////////////
+
+
+///////// display score /////////
+
+displayDiv.style.display = "flex";
+displayDiv.style.flexDirection = "column";
+displayDiv.style.alignItems = "center";
+textStatus.style.fontSize = "20px";
+scoreStauts.style.fontSize = "20px";
+textStatus.style.textAlign = "center";
+scoreStauts.style.textAlign = "center";
+
+/////////////////////////////////
+
+rockBtn.addEventListener("click", () => {
+    if(!isGameEnded())
+    {
+        let computerSelection = getComputerChoice();
+        playRound("rock", computerSelection);
+        scoreStauts.textContent = `Your score: ${humanScore}           Computer score: ${computerScore}`;
+    }
+    if(isGameEnded() && !isPressedLastRound)
+    {
+        gameEnd();
+        isPressedLastRound = true;
+    }
+})
+
+scissorsBtn.addEventListener("click", () => {
+    
+    if(!isGameEnded())
+    {
+        let computerSelection = getComputerChoice();
+        playRound("scissors", computerSelection);
+        scoreStauts.textContent = `Your score: ${humanScore}           Computer score: ${computerScore}`;
+    }
+    if(isGameEnded() && !isPressedLastRound)
+    {
+        gameEnd();
+        isPressedLastRound = true;
+    }
+})
+
+paperBtn.addEventListener("click", () => {
+    if(!isGameEnded())
+    {
+        let computerSelection = getComputerChoice();
+        playRound("paper", computerSelection);
+        scoreStauts.textContent = `Your score: ${humanScore}           Computer score: ${computerScore}`;
+    }
+    if(isGameEnded() && !isPressedLastRound)
+    {
+        gameEnd();
+        isPressedLastRound = true;
+    }
+})
 
